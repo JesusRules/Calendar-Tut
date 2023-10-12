@@ -1,6 +1,8 @@
 :root {
     /* --primary-clr: #b57eec; */
     --primary-clr: #b38add;
+    --primary-darker-clr: #b377ef; /* b377ef */
+    --primary-lighter-clr: #c7b2db;
 }
 * {
     margin: 0;
@@ -107,7 +109,7 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 20px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 20px;
 }
@@ -119,7 +121,8 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--primary-clr);
+    color: var(--primary-darker-clr);
+    /* color: var(--primary-clr); */
     border: 1px solid #f5f5f5;
 }
 
@@ -137,12 +140,13 @@ body {
     position: relative;
     /* font-size: 1.5rem; */
     background-color: #f3e8ff;
+    border: 1px solid var(--primary-lighter-clr);
 }
 .calendar .days .active { /* FIX */
     /* position: relative;
     font-size: 1.5rem;
     background-color: #f3e8ff; */
-    font-size: 2rem;
+    font-size: 1.66rem;
     color: #fff;
     background-color: var(--primary-clr);
 }
@@ -159,7 +163,17 @@ body {
 
 
 .calendar .days .today {
-    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    /* font-size: 1.5rem; */
+    /* border: 1px solid orange; */
+}
+.calendar .days .today::before {
+    content: 'Today';
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
 .calendar .days .event {
@@ -170,12 +184,13 @@ body {
     position: absolute;
     bottom: 10%;
     left: 50%;
-    width: 75%;
+    width: 55%; /* 75 */
     height: 6px;
     border-radius: 30px;
     transform: translateX(-50%);
     /* background-color: var(--primary-clr); */
-    background-color: blue;
+    /* background-color: blue; */
+    background-color: rgb(0, 4, 255);
 }
 
 /* HIDE EVENTUALLY */
