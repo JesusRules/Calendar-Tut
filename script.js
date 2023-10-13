@@ -155,3 +155,25 @@ function gotoDate() {
     }
     alert("Invalid date");
 }
+
+const addEventOpenBtn = document.querySelector('.add-event-open-btn'),
+      addEventContainer = document.querySelector('.add-event-wrapper'),
+      addEventCloseBtn = document.querySelector('.close'),
+
+      addEventTitle = document.querySelector('.event-name'),
+      addEventFrom = document.querySelector('.event-time-from'),
+      addEventTo = document.querySelector('.event-time-to');
+
+      addEventOpenBtn.addEventListener('click', () => {
+    addEventContainer.classList.toggle('active');
+});
+addEventCloseBtn.addEventListener('click', () => {
+    addEventContainer.classList.remove('active');
+});
+
+document.addEventListener('click', (e) => {
+    //If click outside!!!
+    if (e.target !== addEventOpenBtn && !addEventContainer.contains(e.target)) {
+        addEventContainer.classList.remove('active');
+    }
+})
