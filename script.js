@@ -43,6 +43,17 @@ const eventsArr = [
                 time: '6:30 PM'
             }
         ]
+    },
+    {
+        month: 3,
+        day: 23,
+        year: 2023,
+        events: [
+            {
+                title: 'Event 1 - Praise Jesus all day!!',
+                time: '3:30 PM',
+            },
+        ]
     }
 ]
 
@@ -88,19 +99,20 @@ function initCalendar() {
             && year === new Date().getFullYear() 
             && month === new Date().getMonth()) 
         {
-            if (!event) {
-                days += `<div class="day today">${i}</div>`
-            } else {
+            //If event found also add event class
+            if (event) {
                 days += `<div class="day event today">${i}</div>`
+            } else {
+                days += `<div class="day today">${i}</div>`
             }
         }
         else 
         {
-            //Add remaining days
-            if (!event) {
-                days += `<div class="day">${i}</div>`
-            } else {
+            //Add remaining days //If event found also add event class
+            if (event) {
                 days += `<div class="day event">${i}</div>`
+            } else {
+                days += `<div class="day">${i}</div>`
             }
         }
     }
@@ -191,8 +203,8 @@ function gotoDate() {
     const dateArr = dateInput.value.split('/');
     if (dateArr.length === 2) {
         if (dateArr[0] > 0 && dateArr[0] < 13 && dateArr[1].length === 4) {
-            month = dateArr[0] - 1;
-            year = dateArr[1];
+            month = parseInt(dateArr[0] - 1);
+            year = parseInt(dateArr[1]);
             initCalendar();
             return;
         }
