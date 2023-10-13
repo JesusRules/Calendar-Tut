@@ -8,7 +8,8 @@ const calendar = document.querySelector(".calendar"),
       dateInput = document.querySelector('.date-input'),
       eventDay = document.querySelector('.event-day'),
       eventDate = document.querySelector('.event-date'),
-      eventsContainer = document.querySelector('.events');
+      eventsContainer = document.querySelector('.events'),
+      addEventSubmit = document.querySelector('.add-event-btn');
 
 let today = new Date();
 let activeDay;
@@ -234,7 +235,7 @@ function gotoDate() {
 const addEventOpenBtn = document.querySelector('.add-event-open-btn'),
       addEventContainer = document.querySelector('.add-event-wrapper'),
       addEventCloseBtn = document.querySelector('.close'),
-
+      //Event inputs
       addEventTitle = document.querySelector('.event-name'),
       addEventFrom = document.querySelector('.event-time-from'),
       addEventTo = document.querySelector('.event-time-to');
@@ -246,12 +247,14 @@ addEventCloseBtn.addEventListener('click', () => {
     addEventContainer.classList.remove('active');
 });
 
-document.addEventListener('click', (e) => {
-    //If click outside!!!
-    if (e.target !== addEventOpenBtn && !addEventContainer.contains(e.target)) {
-        addEventContainer.classList.remove('active');
-    }
-})
+
+
+// document.addEventListener('click', (e) => {
+//     //If click outside!!!
+//     if (e.target !== addEventOpenBtn && !addEventContainer.contains(e.target)) {
+//         addEventContainer.classList.remove('active');
+//     }
+// })
 
 
 //Allow only 50 characters in title
@@ -433,3 +436,39 @@ function updateEvents(date) {
 }
 
 //Lets create function to add events
+addEventSubmit.addEventListener('click', () => {
+    const eventTitle = addEventTitle.value;
+    const eventFrom = addEventFrom.value;
+    const eventTo = addEventTo.value;
+    console.log(eventTitle);
+    console.log(eventFrom);
+    console.log(eventTo);
+    const eventObj = {
+        month: month + 1,
+        day: activeDay,
+        year: year,
+        events: [
+            {
+                title: eventTitle,
+                time: `${eventFrom} to ${eventTo}`
+            }
+        ]
+    }
+    eventsArr.push(eventObj);
+    const activeDayRem = Number(activeDay);
+    initCalendar(); //get events
+    //Get active
+    const days = document.querySelectorAll('.day');
+    setTimeout(() => {
+        days.forEach((day) => {
+            if (!day.classList.contains('next-date') && !day.classList.contains('prev-date') 
+            && day.innerHTML == activeDayRem)
+        {
+            day.classList.add('active');
+            getActiveDay(activeDayRem);
+            updateEvents(activeDayRem);
+            activeDayRem = activeDayRem;
+        }
+        })
+    }, 0);
+})

@@ -146,15 +146,12 @@ body {
     border: 1px solid var(--primary-lighter-clr);
 }
 .calendar .days .active { /* FIX */
-    /* position: relative;
-    font-size: 1.5rem;
-    background-color: #f3e8ff; */
     position: relative;
     font-size: 1.66rem;
     color: #fff;
     background-color: var(--primary-clr);
 }
-.calendar .days .active::before {
+.calendar .days .day:not(.today) .active::before {
     content: '';
     position: absolute;
     top: 0;
@@ -164,7 +161,6 @@ body {
     box-shadow: 0 0 10px 2px var(--primary-clr);
 }
 
-
 .calendar .days .today {
     display: flex;
     flex-direction: column;
@@ -172,12 +168,27 @@ body {
     /* font-size: 1.5rem; */
     /* border: 1px solid orange; */
 }
-.calendar .days .today::before {
+.calendar .day.today::before {
     content: 'Today';
     font-style: italic;
     font-weight: 600;
     font-size: 1.1rem;
 }
+.calendar .day.today.active::before {
+    /* content: 'Today';
+    position: absolute;
+     */
+     font-size: 1.1rem;
+    box-shadow: 0 0 10px 2px var(--primary-clr);
+}
+
+/* .calendar .days .today.active::before {
+    content: 'Today';
+    display: flex;
+    justify-content: center;
+    position: relative;
+} */
+
 
 .calendar .days .event {
     position: relative;
@@ -185,10 +196,10 @@ body {
 .calendar .days .event::after {
     content: '';
     position: absolute;
-    bottom: 10%;
+    bottom: 13%;
     left: 50%;
-    width: 55%; /* 75 */
-    height: 6px;
+    width: 75%; /* 75 */
+    height: 7.5px;
     border-radius: 30px;
     transform: translateX(-50%);
     /* background-color: var(--primary-clr); */
@@ -198,12 +209,18 @@ body {
 
 /* HIDE EVENTUALLY */
 .calendar .event:hover::after {
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: rgb(0, 4, 255);
 }
 /* HIDE EVENTUALLY */
 .calendar .active.event::after { /* FIX */
-    background-color: #fff;
-    bottom: 20%;
+    /* background-color: #fff; */
+    background-color: rgb(0, 4, 255);
+    bottom: 15%;
+    /* IDK */
+    height: 9px;
+    border-radius: 3px;
+    width: 80%;
 }
 .calendar .active.event {
     padding-bottom: 10px;
