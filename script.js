@@ -32,34 +32,37 @@ const months = [
 ];
 
 //Default events array
-const eventsArr = [
-    {
-        month: 3,
-        day: 20,
-        year: 2023,
-        events: [
-            {
-                title: 'Event 1 - Praise Jesus all day!!',
-                time: '3:30 PM',
-            },
-            {
-                title: 'Event 2 - Go swimming with family!',
-                time: '6:30 PM'
-            }
-        ]
-    },
-    {
-        month: 3,
-        day: 23,
-        year: 2023,
-        events: [
-            {
-                title: 'Event 1 - Praise Jesus all day!!',
-                time: '3:30 PM',
-            },
-        ]
-    }
-]
+let eventsArr = [];
+//Initial call get
+getEvents();
+// const eventsArr = [
+//     {
+//         month: 3,
+//         day: 20,
+//         year: 2023,
+//         events: [
+//             {
+//                 title: 'Event 1 - Praise Jesus all day!!',
+//                 time: '3:30 PM',
+//             },
+//             {
+//                 title: 'Event 2 - Go swimming with family!',
+//                 time: '6:30 PM'
+//             }
+//         ]
+//     },
+//     {
+//         month: 3,
+//         day: 23,
+//         year: 2023,
+//         events: [
+//             {
+//                 title: 'Event 1 - Praise Jesus all day!!',
+//                 time: '3:30 PM',
+//             },
+//         ]
+//     }
+// ]
 
 
 //function to add days - works procedually
@@ -365,11 +368,14 @@ function addListener() {
                     const days = document.querySelectorAll('.day');
                    
                     days.forEach((day) => {
-                        if (!day.classList.contains('prev-date') && day.innerHTML === e.target.innerHTML) {
+                        if (!day.classList.contains('prev-date') && day.innerHTML === e.target.innerHTML) 
+                        {
                             day.classList.add('active');
+                            getActiveDay(e.target.innerHTML);
+                            updateEvents(Number(e.target.innerHTML));
                         }
                     })
-                }, 100);
+                }, 50);
                 //Same with NEXT month days
             } else if (e.target.classList.contains('next-date')) {
                 nextMonth();
@@ -381,9 +387,11 @@ function addListener() {
                         if (!day.classList.contains('next-date') && day.innerHTML === e.target.innerHTML)
                         {
                             day.classList.add('active');
+                            getActiveDay(e.target.innerHTML);
+                            updateEvents(Number(e.target.innerHTML));
                         }
                     })
-                }, 100);
+                }, 50);
             }
             else {
                 //remaining current month days
@@ -433,6 +441,8 @@ function updateEvents(date) {
             </div>`;
     }
     eventsContainer.innerHTML = events;
+    //Save events when days clicked? UpdateEvent
+    saveEvents();
 }
 
 //Lets create function to add events
@@ -601,3 +611,18 @@ eventsContainer.addEventListener('click', (e) => {
         updateEvents(activeDay);
     }
 })
+
+document.querySelector('.click-me-test').addEventListener('click', saveEvents);
+// Lets store events in local storage and get from there
+function saveEvents() {
+    // console.log(eventsArr);
+    // console.log(JSON.stringify(eventsArr));
+    localStorage.setItem('events', JSON.stringify(eventsArr));
+}
+
+function getEvents() {
+    if (localStorage.getItem('events') === null) {
+        return;
+    }
+    eventsArr.push(...JSON.parse(localStorage.getItem('events')));
+}
