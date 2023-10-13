@@ -111,6 +111,11 @@ todayBtn.addEventListener('click', () => {
 })
 
 dateInput.addEventListener('input', (e) => {
+    const slashCount = (dateInput.value.match(/\//g) || []).length;
+    if (slashCount > 1) {
+        // If there are more than one colons, remove the last colon
+        e.target.value = dateInput.value.slice(0, -1);
+    }
     //Allow only numbers, remove anything else
     dateInput.value = dateInput.value.replace(/[^0-9/]/g, "");
     if (dateInput.value.length === 2
@@ -175,5 +180,47 @@ document.addEventListener('click', (e) => {
     //If click outside!!!
     if (e.target !== addEventOpenBtn && !addEventContainer.contains(e.target)) {
         addEventContainer.classList.remove('active');
+    }
+})
+
+
+//Allow only 50 characters in title
+addEventTitle.addEventListener('input', (e) => {
+    addEventTitle.value = addEventTitle.value.slice(0, 50);
+});
+
+//Time format in from and to time
+addEventFrom.addEventListener('input', (e) => {
+    //Only 1 :!!!
+    const colonCount = (addEventFrom.value.match(/:/g) || []).length;
+    if (colonCount > 1) {
+        // If there are more than one colons, remove the last colon
+        e.target.value = addEventFrom.value.slice(0, -1);
+    }
+    //Only numbers
+    addEventFrom.value = addEventFrom.value.replace(/[^0-9:]/g, '');
+    //If 2 numbers, add ':'
+    if (addEventFrom.value.length === 2
+        && !addEventFrom.value.includes(':')) 
+    {
+        addEventFrom.value += ":";
+    }
+    //MINE
+    if (addEventFrom.value.length === 3 
+        && (!addEventFrom.value.includes(':')))
+    {
+        const lastChar = addEventFrom.value.slice(-1);
+        if (lastChar !== ':') {
+            addEventFrom.value = addEventFrom.value.slice(0, -1) + ':' + lastChar;
+        }
+    }
+    //Dont allow more then 5 characters
+    if (addEventFrom.value.length > 5) {
+        addEventFrom.value = addEventFrom.value.slice(0, 5);   
+    }
+    if (e.inputType === "deleteContentBackward") {
+        if (addEventFrom.value.length === 3) {
+            addEventFrom.value = addEventFrom.value.slice(0, 2);
+        }
     }
 })
