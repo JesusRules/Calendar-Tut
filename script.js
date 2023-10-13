@@ -569,3 +569,35 @@ function convertTime(time) {
 }
 
 //Lets create a function to remove events on click
+eventsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('event')) {
+        const eventTitle = e.target.children[0].children[1].innerHTML;
+        console.log(eventTitle);
+        //Get the title of event than search in array by title and delete
+        // eventsArr.filter(item => item.title != eventTitle);
+        eventsArr.forEach((event) => {
+            if (event.day === activeDay ||
+                event.month === month + 1 ||
+                event.year === year) 
+            {
+                // event.events = event.events.filter(item => item.title !== eventTitle);
+                event.events.forEach((item, index) => {
+                    if (item.title === eventTitle) {
+                        event.events.splice(index, 1); //removes 1 element at specified index
+                    }
+                })
+                // If no event remains, remove complete day?
+                if (event.events.length === 0) {
+                    eventsArr.splice(eventsArr.indexOf(event), 1);
+                    //After remove complete, remove active class of that day?
+                    const activeDayElem = document.querySelector('.day.active');
+                    if (activeDayElem.classList.contains('event')) 
+                    {
+                        activeDayElem.classList.remove('event');
+                    }
+                }
+            }
+        })
+        updateEvents(activeDay);
+    }
+})
