@@ -438,11 +438,96 @@ function updateEvents(date) {
 //Lets create function to add events
 addEventSubmit.addEventListener('click', () => {
     const eventTitle = addEventTitle.value;
+    const eventTimeFrom = addEventFrom.value;
+    const eventTimeTo = addEventTo.value;
+
+    //some validation
+    if (eventTitle === '' || eventTimeFrom === '' || eventTimeTo === '') {
+        alert('Please fill all the fields');
+        return;
+    }
+    const timeFromArr = eventTimeFrom.split(':');
+    const timeToArr = eventTimeTo.split(':');
+
+    if (timeFromArr.length !== 2 || timeToArr.length !== 2 
+        || timeFromArr[0] > 23 //hours
+        || timeFromArr[1] > 59  //minutes
+        || timeToArr[0] > 23 //hours
+        || timeToArr[1] > 59)  //minutes
+    {
+        alert("Invalid Time Format");
+        return;
+    }
+    const timeFrom = convertTime(eventTimeFrom);
+    const timeTo = convertTime(eventTimeTo);
+
+    const newEvent = {
+        title: eventTitle,
+        time: `${timeFrom} - ${timeTo}`,
+    };
+
+    let eventAdded = false;
+
+    // Check if eventsArr is not empty
+    if (eventsArr.length > 0) {
+        // Check if current day has already any event then add to that
+        // if (eventsArr.some(item => item.day == activeDay))
+        eventsArr.forEach((item) => {
+            if (item.day == activeDay &&
+                item.month == month + 1 &&
+                item.year == year)
+            {
+                eventAdded = true;
+                item.events.push(newEvent);
+            }
+        })
+    }
+    // If event array empty or current day has no event, create new
+    if (!eventAdded) {
+        eventsArr.push({
+            day: activeDay,
+            month: month + 1,
+            year: year,
+            events: [ newEvent ]
+        });
+    }
+    //Remove active from add event form
+    addEventContainer.classList.remove('active');
+    //Clear the fields
+    addEventTitle.value = '';
+    addEventFrom.value = '';
+    addEventTo.value = '';
+
+    //Show current added event
+    updateEvents(activeDay);
+    //Also add event class to newly added day if not already
+    const activeDayElem = document.querySelector('.day.active');
+    if (!activeDayElem.classList.contains('event')) {
+        activeDayElem.classList.add('event');
+    }
+
+    return;
+    // const activeDayRem = Number(activeDay);
+    // initCalendar(); //get events
+    // //Get active
+    // const days = document.querySelectorAll('.day');
+    // setTimeout(() => {
+    //     days.forEach((day) => {
+    //         if (!day.classList.contains('next-date') && !day.classList.contains('prev-date') 
+    //         && day.innerHTML == activeDayRem)
+    //     {
+    //         day.classList.add('active');
+    //         getActiveDay(activeDayRem);
+    //         updateEvents(activeDayRem);
+    //         activeDayRem = activeDayRem;
+    //     }
+    //     })
+    // }, 0);
+
+    return;
+    // const eventTitle = addEventTitle.value;
     const eventFrom = addEventFrom.value;
     const eventTo = addEventTo.value;
-    console.log(eventTitle);
-    console.log(eventFrom);
-    console.log(eventTo);
     const eventObj = {
         month: month + 1,
         day: activeDay,
@@ -472,3 +557,15 @@ addEventSubmit.addEventListener('click', () => {
         })
     }, 0);
 })
+
+function convertTime(time) {
+    let timeArr = time.split(':');
+    let timeHour = timeArr[0];
+    let timeMin = timeArr[1];
+    let timeFormat = timeHour >= 12 ? "PM" : "AM";
+    timeHour = timeHour % 12 || 12;
+    time = `${timeHour}:${timeMin} ${timeFormat}`;
+    return time;   
+}
+
+//Lets create a function to remove events on click
