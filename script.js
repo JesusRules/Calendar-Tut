@@ -15,6 +15,7 @@ let today = new Date();
 let activeDay;
 let month = today.getMonth();
 let year = today.getFullYear();
+let firstLoadup = false;
 
 const months = [
     "January",
@@ -84,7 +85,14 @@ function initCalendar() {
     let days = "";
     //Prev month days
     for (let x = day; x > 0; x--) {
-        days += `<div class="day prev-date">${prevDays - x + 1}</div>`;
+        let displayMonth = month;
+        let displayYear = year;
+        if (month < 1) {
+            displayMonth = 12;
+            displayYear--;
+        }
+        let dataDate = `${displayYear}-${displayMonth}-${prevDays - x + 1}`;
+        days += `<div data-date=${dataDate} class="day prev-date">${prevDays - x + 1}</div>`;
     }
     
     //Current month days
@@ -99,6 +107,7 @@ function initCalendar() {
                 event = true;
             }
         })
+        let dataDate = `${year}-${month + 1}-${i}`;
 
         //if day is today, add class today
         if (i === new Date().getDate() 
@@ -112,25 +121,36 @@ function initCalendar() {
             //If event found also add event class
             //Add active on today at startup
             if (event) {
-                days += `<div class="day event  today">${i}</div>`
+                {
+                    days += `<div data-date=${dataDate} class="day event today">${i}</div>`
+                }
             } else {
-                days += `<div class="day  today">${i}</div>`
+                {
+                    days += `<div data-date=${dataDate} class="day today">${i}</div>`
+                }
             }
         }
         else 
         {
             //Add remaining days //If event found also add event class
             if (event) {
-                days += `<div class="day event">${i}</div>`
+                days += `<div data-date=${dataDate} class="day event">${i}</div>`
             } else {
-                days += `<div class="day">${i}</div>`
+                days += `<div data-date=${dataDate} class="day">${i}</div>`
             }
         }
     }
 
     //Next month days
     for (let j = 1; j <= nextDays; j++) {
-        days += `<div class="day next-date">${j}</div>`
+        let displayMonth = month + 2;
+        let displayYear = year;
+        if (month + 2 > 12) {
+            displayMonth = 1;
+            displayYear++;
+        }
+        let dataDate = `${displayYear}-${displayMonth}-${j}`;
+        days += `<div data-date=${dataDate} class="day next-date">${j}</div>`
     }
 
     daysContainer.innerHTML = days;
@@ -357,6 +377,8 @@ function addListener() {
             days.forEach((day) => {
                 day.classList.remove('active');
             })
+
+            console.log(e.target.getAttribute('data-date'));
 
             // If previous month day clicked, goto previous month and add active
             if (e.target.classList.contains('prev-date')) {
